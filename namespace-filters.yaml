@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: namespace-filters
+  namespace: kyverno
+data:
+  exclude: '["cattle-dashboards", "cattle-fleet-system", "cattle-impersonation-system", "cattle-monitoring-system", "cattle-neuvector-system", "cattle-system", "cis-operator-system", "external-secrets", "gke-managed-system", "gmp-public", "gmp-system", "istio-system", "kube-node-lease", "kube-public","kube-system", "kyverno", "lgtm-system", "local"]'

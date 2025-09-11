@@ -1,0 +1,18 @@
+kyverno:
+  plugin:
+    enabled: true
+
+ui:
+  enabled: true
+  customBoards:
+    - name: "Project 12345 Dashboard"
+      namespaces:
+        selector:
+          projectId: pid12345
+      sources:
+        list:
+          - kyverno
+      clusterScope:
+        enabled: false
+
+# helm upgrade policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.0.5

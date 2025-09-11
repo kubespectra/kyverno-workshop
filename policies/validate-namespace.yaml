@@ -1,0 +1,41 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: validate-namespace-projectid
+  annotations:
+    policies.kyverno.io/title: Validate projectId
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Namespace
+    policies.kyverno.io/description: >-
+      Ensures that every newly created Namespace includes a valid 'projectId' label and that the value corresponds to an allowed project-to-namespace mapping.  
+spec:
+  rules:
+    - name: validate-ns-label-projectid
+      match:
+        resources:
+          kinds:
+            - Namespace
+      context:
+        - name: projectMap
+          configMap:
+            name: project-namespace-mapping
+            namespace: kyverno
+      preconditions:
+        all:
+        - key: "{{ request.object.metadata.name }}"
+          operator: AnyNotIn
+          value: "default"
+      validate:
+        failureAction: Audit
+        deny:
+          conditions:
+            any:
+              - key: "{{ request.object.metadata.labels.projectId || '' }}" 
+                operator: Equals
+                value: ''
+                message: "The label projectId is missing"
+              - key: "{{ pattern_match('{{ projectMap.data.{{ request.object.metadata.labels.projectId }} }}', '{{ request.object.metadata.name}}') }}"
+                operator: Equals
+                value: false
+                message: "Namespace: {{ request.object.metadata.name }} with projectID: {{ request.object.metadata.labels.projectId  }} ist not allowed."
+

@@ -1,0 +1,46 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: validate-namespae
+policies:
+  - ../../policies/validate-namespace.yaml
+resources:
+  - namespace-success.yaml
+  - namespace-fail.yaml
+  - namespace-skip.yaml
+variables: variables.yaml
+results:
+  - policy: validate-namespace-projectid
+    rule: validate-ns-label-projectid
+    resources: 
+      - team-x
+    kind: Namespace
+    result: pass
+  
+  - policy: validate-namespace-projectid
+    rule: validate-ns-label-projectid
+    resources:
+      - team-y
+    kind: Namespace
+    result: fail
+  
+  - policy: validate-namespace-projectid
+    rule: validate-ns-label-projectid
+    resources:
+      - team-z
+    kind: Namespace
+    result: fail
+
+  - policy: validate-namespace-projectid
+    rule: validate-ns-label-projectid
+    resources:
+      - team-z-no-label
+    kind: Namespace
+    result: fail
+
+  - policy: validate-namespace-projectid
+    rule: validate-ns-label-projectid
+    resources:
+      - default
+    kind: Namespace
+    result: skip

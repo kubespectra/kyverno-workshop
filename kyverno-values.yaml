@@ -1,0 +1,5 @@
+features:
+  dumpPayload:
+    enabled: true
+replicaCount: 1
+

@@ -1,0 +1,11 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: validate-namespace-projectid
+    rules:
+      - name: validate-ns-label-projectid
+        values:
+          projectMap.data.pid12345: team-x
+          projectMap.data.pid67890: team-y

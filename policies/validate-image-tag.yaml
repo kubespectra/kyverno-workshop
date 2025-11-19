@@ -10,38 +10,10 @@ metadata:
     policies.kyverno.io/description: >-
       The ':latest' tag is mutable and can lead to unexpected errors if the
       image changes. A best practice is to use an immutable tag that maps to
-      a specific version of an application Pod. This policy validates that the image
-      specifies a tag and that it is not called `latest`.      
+      a specific version of an application Pod.     
 spec:
-  validationFailureAction: Audit 
   background: true
   rules:
-  - name: require-image-tag
-    context:
-      - name: namespacefilters
-        configMap:
-          name: namespace-filters
-          namespace: kyverno
-    match:
-      any:
-      - resources:
-          kinds:
-          - Pod
-    preconditions:
-      all:
-      - key: "{{request.object.metadata.namespace}}"
-        operator: AnyNotIn
-        value: "{{namespacefilters.data.exclude}}"
-    validate:
-      message: "An image tag is required."
-      pattern:
-        spec:
-          =(ephemeralContainers):
-          - image: "*:*"
-          =(initContainers):
-          - image: "*:*"
-          =(containers):
-          - image: "*:*"
   - name: deny-latest-tag
     context:
       - name: namespacefilters
@@ -55,16 +27,13 @@ spec:
           - Pod
     preconditions:
       all:
-      - key: "{{request.object.metadata.namespace}}"
+      - key: "{{request.object.metadata.namespace}}" 
         operator: AnyNotIn
         value: "{{namespacefilters.data.exclude}}"
     validate:
+      failureAction: Audit
       message: "Using the mutable image tag 'latest' is not allowed."
       pattern:
         spec:
-          =(ephemeralContainers):
-          - image: "!*:latest"
-          =(initContainers):
-          - image: "!*:latest"
           =(containers):
           - image: "!*:latest"

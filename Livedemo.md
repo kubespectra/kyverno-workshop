@@ -19,22 +19,42 @@ kubectl apply -f policies/validate-namespace.yaml
 If a policy has already been created, dumpPayload can be set to true in the Admission Controller deployment to be able to read the admission.request.
 
 ```sh {"interactive":"true","terminalRows":"16"}
-kubectl create namespace team-x-backend
-kubectl logs kyverno-admission-controller-57b6666858-p25q8 -c kyverno | grep "admission.request" | grep "team-x-backend"
+kubectl create namespace team-x-frontend
+kubectl logs kyverno-admission-controller-57b6666858-sw769 -c kyverno | grep "admission.request" | grep "team-x-frontend"
 ```
 
 ```sh {"interactive":"false","terminalRows":"789"}
 jq . request.json
 ```
 
+```sh {"interactive":"false"}
+# Policy to check that the tag is not 'latest'
+kubectl apply -f policies/validate-image-tag.yaml
+```
+
 # Monitoring of the policy
 
 ```sh {"interactive":"false"}
+# reports for cluster scoped resources
 kubectl get clusterpolicyreport
 ```
 
 ```sh {"interactive":"false"}
+# reports for namespace scoped resources
 kubectl get policyreport -A
+```
+
+```sh {"interactive":"false","terminalRows":"43"}
+kubectl describe policyreport da076e17-bea6-43b9-9271-fe2717348fff -n team-x
+```
+
+```sh {"interactive":"false"}
+kubectl get clusterpolicy validate-image-tag -ojson | jq .status
+```
+
+```sh {"interactive":"false","name":"","terminalRows":"2"}
+jq .object.metadata.namespace request-pod.json
+jq .namespace request-pod.json
 ```
 
 ```sh

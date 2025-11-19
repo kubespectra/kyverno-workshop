@@ -2,6 +2,13 @@ kyverno:
   plugin:
     enabled: true
 
+sourceFilters:
+  - selector:
+      # -- select Report by source
+      source: kyverno
+    # -- Filter out Reports of controlled Pods and Jobs, only works for Reports with scope resource
+    uncontrolledOnly: false
+
 ui:
   enabled: true
   customBoards:
@@ -15,4 +22,5 @@ ui:
       clusterScope:
         enabled: false
 
-# helm upgrade policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.0.5
+# helm install policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.0.5
+# helm upgrade policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.1.0

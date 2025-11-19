@@ -3,7 +3,7 @@
 Check which JMESPath is needed:
 
 ```sh {"interactive":"false"}
-kubectl get ns team-x -o json | kyverno jp query 'metadata.labels.projectId'
+kubectl get ns team-x -o json | kyverno jp query 'metadata.name'
 ```
 
 # Testing the new policy (Manually and in Github)
@@ -19,8 +19,8 @@ kubectl apply -f policies/validate-namespace.yaml
 If a policy has already been created, dumpPayload can be set to true in the Admission Controller deployment to be able to read the admission.request.
 
 ```sh {"interactive":"true","terminalRows":"16"}
-kubectl create namespace team-x-frontend
-kubectl logs kyverno-admission-controller-57b6666858-sw769 -c kyverno | grep "admission.request" | grep "team-x-frontend"
+kubectl create namespace team-z-frontend
+kubectl logs kyverno-admission-controller-57b6666858-sw769 -c kyverno -n kyverno | grep "admission.request" | grep "team-z-frontend"
 ```
 
 ```sh {"interactive":"false","terminalRows":"789"}
@@ -50,11 +50,6 @@ kubectl describe policyreport da076e17-bea6-43b9-9271-fe2717348fff -n team-x
 
 ```sh {"interactive":"false"}
 kubectl get clusterpolicy validate-image-tag -ojson | jq .status
-```
-
-```sh {"interactive":"false","name":"","terminalRows":"2"}
-jq .object.metadata.namespace request-pod.json
-jq .namespace request-pod.json
 ```
 
 ```sh

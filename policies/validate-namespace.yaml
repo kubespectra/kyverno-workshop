@@ -16,7 +16,7 @@ spec:
           kinds:
             - Namespace
       context:
-        - name: projectMap
+        - name: projectMaps
           configMap:
             name: project-namespace-mapping
             namespace: kyverno
@@ -34,8 +34,8 @@ spec:
                 operator: Equals
                 value: ''
                 message: "The label projectId is missing"
-              - key: "{{ pattern_match('{{ projectMap.data.{{ request.object.metadata.labels.projectId }} }}', '{{ request.object.metadata.name}}') }}"
+              - key: "{{ pattern_match('{{ projectMap.data.{{ request.object.metadata.label.projectId }} }}', '{{ request.object.metadata.name}}') }}"
                 operator: Equals
-                value: false
+                value: true
                 message: "Namespace: {{ request.object.metadata.name }} with projectID: {{ request.object.metadata.labels.projectId  }} ist not allowed."
 

@@ -22,5 +22,4 @@ ui:
       clusterScope:
         enabled: false
 
-# helm install policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.0.5
-# helm upgrade policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.1.0
+# helm install policy-reporter policy-reporter/policy-reporter -f reporter-values.yaml --create-namespace -n policy-reporter --version=3.4.2

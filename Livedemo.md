@@ -3,7 +3,7 @@
 Check which JMESPath is needed:
 
 ```sh {"interactive":"false"}
-kubectl get ns team-x -o json | kyverno jp query 'metadata.name'
+kubectl get ns team-x -o json | kyverno jp query 'metadata.labels.projectId'
 ```
 
 # Testing the new policy (Manually and in Github)
@@ -42,14 +42,6 @@ kubectl get clusterpolicyreport
 ```sh {"interactive":"false"}
 # reports for namespace scoped resources
 kubectl get policyreport -A
-```
-
-```sh {"interactive":"false","terminalRows":"43"}
-kubectl describe policyreport da076e17-bea6-43b9-9271-fe2717348fff -n team-x
-```
-
-```sh {"interactive":"false"}
-kubectl get clusterpolicy validate-image-tag -ojson | jq .status
 ```
 
 ```sh
